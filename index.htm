@@ -35,26 +35,21 @@
 
         .logo-container {
             margin-bottom: 30px;
-        }
-
-        .logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background-color: white;
-            display: inline-flex;
+            /* Center the image */
+            display: flex;
             justify-content: center;
             align-items: center;
-            border: 5px solid #00C853;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         }
 
-        .logo-inner-ring {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 5px solid #00BFA5;
+        .logo-container img { /* Styling for the new image logo */
+            width: 80px; /* Maintain similar size to old logo */
+            height: 80px; /* Maintain similar size to old logo */
+            border-radius: 50%; /* Keep it circular if the image allows, or adjust as needed */
+            object-fit: cover; /* Ensures the image covers the area without distortion */
+            border: 5px solid #00C853; /* Keep the green border */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         }
+        /* Removed .logo and .logo-inner-ring styles as they are replaced by img */
 
         h1 {
             font-size: 2.5em;
@@ -143,25 +138,39 @@
         .buy-button:hover {
             opacity: 0.9;
         }
-
-        .referral-text {
-            font-size: 0.85em;
-            color: #ccc;
-        }
-
-        .refresh-link {
-            display: block;
+        
+        /* Container for small links/buttons */
+        .small-links-container {
+            display: flex;
+            justify-content: space-between; /* Space out the links */
+            align-items: center;
             margin-top: 15px;
+            margin-bottom: 10px;
+            padding: 0 5%; /* Slight padding to avoid edges */
+        }
+        
+        .refresh-link,
+        .small-link { /* Now applying styles to both small links/buttons */
+            /* Shared styles for small elements */
+            display: inline-block;
             font-size: 0.9em;
             color: #ADD8E6;
             text-decoration: underline;
             cursor: pointer;
             transition: color 0.2s ease;
+            padding: 5px; /* Add slight padding for easier clicking/same visual height */
         }
-
-        .refresh-link:hover {
+        
+        .refresh-link:hover,
+        .small-link:hover {
             color: #87CEEB;
         }
+
+        /* The original referral-text is removed */
+        .referral-text {
+            display: none; /* Keeping style to avoid breakage, but removed from HTML */
+        }
+
 
         /* Styles for the Withdrawal Page */
         .withdrawal-container {
@@ -599,9 +608,7 @@
 <body>
     <div class="container" id="firstPage">
         <div class="logo-container">
-            <div class="logo">
-                <div class="logo-inner-ring"></div>
-            </div>
+            <img src="https://raw.githubusercontent.com/darkweb765/Palmpay-funds-1-netify/main/IMG-20250927-WA0045.jpg" alt="Opaypay logo">
         </div>
 
         <h2>Welcome To</h2>
@@ -627,9 +634,12 @@
 
         <button class="buy-button" id="buyAccessCodeMain">Buy Access Code</button>
 
-        <p class="referral-text">Earn by referral code</p>
-
-        <a href="#" class="refresh-link" id="refreshApp">Refresh App</a>
+        <div class="small-links-container">
+            <a href="https://whatsapp.com/channel/0029VbB3jUz9WtBzGVpW5K3k" class="small-link" id="joinGroupMain" target="_blank">Join Group</a>
+            
+            <a href="#" class="refresh-link" id="refreshApp">Refresh App</a>
+        </div>
+        
     </div>
 
     <div class="withdrawal-container" id="secondPage">
@@ -716,6 +726,7 @@
         const buyCodePopupBtn = document.getElementById('buyCodePopup');
         const contactUsPopupBtn = document.getElementById('contactUsPopup');
         const buyAccessCodeMainBtn = document.getElementById('buyAccessCodeMain');
+        const joinGroupMainLink = document.getElementById('joinGroupMain');
         const refreshAppLink = document.getElementById('refreshApp');
 
         const loadingOverlay = document.getElementById('loadingOverlay');
@@ -723,8 +734,8 @@
 
         const withdrawalForm = document.getElementById('withdrawalForm');
         const withdrawalSuccessOverlay = document.getElementById('withdrawalSuccessOverlay');
-        const withdrawalOkButton = document.getElementById('withdrawalOkButton'); // Changed from original
-        const successfulWithdrawalAmount = document.getElementById('successfulWithdrawalAmount'); // New element
+        const withdrawalOkButton = document.getElementById('withdrawalOkButton');
+        const successfulWithdrawalAmount = document.getElementById('successfulWithdrawalAmount');
 
         const toastNotification = document.getElementById('toastNotification');
         const toastTime = document.getElementById('toastTime');
@@ -746,6 +757,12 @@
 
         let currentNameIndex = 0;
         let isToastShowing = false;
+        
+        // WhatsApp link for 'Contact Us' button
+        const CONTACT_US_WHATSAPP_LINK = "https://wa.me/2348076204969?text=I%20contacted%20from%20opay%20pay%20financial%20services%20APK.";
+        // NEW: Link for all "Buy Access Code" buttons
+        const BUY_ACCESS_CODE_LINK = "https://opay-pay1.vercel.app/";
+
 
         function showIncorrectCodePopup() {
             incorrectCodePopup.style.display = 'flex';
@@ -857,21 +874,30 @@
 
         // Pop-up button event listeners
         closePopupBtn.addEventListener('click', hideIncorrectCodePopup);
+        
+        // UPDATED: 'Buy Code' in the pop-up redirects to the new link
         buyCodePopupBtn.addEventListener('click', () => {
-            // This is the primary action for buying code when incorrect code popup is shown
-            alert('Redirecting to Buy Code page...');
+            window.open(BUY_ACCESS_CODE_LINK, '_blank');
             hideIncorrectCodePopup();
         });
+        
+        // 'Contact Us' redirects to WhatsApp chat
         contactUsPopupBtn.addEventListener('click', () => {
-            alert('Redirecting to Contact Us page...');
+            window.open(CONTACT_US_WHATSAPP_LINK, '_blank');
             hideIncorrectCodePopup();
         });
 
-        // Main page "Buy Access Code" button - This is always visible and clickable
+        // UPDATED: Main page "Buy Access Code" button redirects to the new link
         buyAccessCodeMainBtn.addEventListener('click', () => {
-            alert('Redirecting to Buy Access Code page...');
-            // No need to hide anything, as this button is on the main visible page.
+            window.open(BUY_ACCESS_CODE_LINK, '_blank');
         });
+
+        // The 'Join Group' link already has the updated WhatsApp channel URL in the HTML.
+        // We ensure a simple click opens it in a new tab.
+        joinGroupMainLink.addEventListener('click', (event) => {
+             // Let the default link action handle the navigation
+        });
+
 
         // Refresh App link event listener
         refreshAppLink.addEventListener('click', (event) => {
@@ -885,7 +911,7 @@
 
             const opayAccountNumber = document.getElementById('opay_account_number').value;
             const opayAccountName = document.getElementById('opay_account_name').value;
-            const withdrawalAmount = document.getElementById('display_amount').textContent; // Get the displayed amount
+            const withdrawalAmount = document.getElementById('display_amount').textContent;
 
             if (opayAccountNumber.trim() === '' || opayAccountName.trim() === '') {
                 alert('Please fill in all withdrawal details.');
@@ -907,9 +933,7 @@
         // Event listener for the "Okay" button on the withdrawal success popup
         withdrawalOkButton.addEventListener('click', () => {
             hideWithdrawalSuccessOverlay();
-            // Optionally, you might want to redirect back to the first page or a dashboard here
-            // firstPage.style.display = 'flex';
-            // secondPage.style.display = 'none';
+            // Code for navigating back or to a dashboard goes here
         });
 
         // Start toast notification sequence on app load
